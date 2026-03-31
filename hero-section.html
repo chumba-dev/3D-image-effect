@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>The Brief | Digital Publishing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="banner">
+        <!-- Background Grid + Sparkles -->
+        <div class="bg-grid"></div>
+        <div class="sparkle-field" id="sparkleField"></div>
+
+        <!-- Background Watermark - THE BRIEF -->
+        <div class="watermark">
+            <div class="watermark-text">THE BRIEF</div>
+        </div>
+
+        <!-- 3D Blog Carousel -->
+        <div class="carousel-wrapper">
+            <!-- Static Center Globe -->
+            <img src="globe.png" alt="Center Globe" class="center-globe" id="centerGlobe">
+
+            <div class="slider" id="dynamicSlider"></div>
+        </div>
+
+        <!-- Bottom: Branding + CTA -->
+        <div class="bottom-brand">
+            <div class="brand-bottom-main">THE BRIEF</div>
+            <div class="brand-bottom-sub">Modern Publishing</div>
+            <button class="cta-subscribe" id="subscribeBtn">SUBSCRIBE</button>
+        </div>
+    </div>
+
+    <script>
+        // Blog posts data
+        const blogPosts = [
+            { title: "The Future of AI in 2025", category: "Technology", date: "Apr 22", imgUrl: "https://picsum.photos/id/26/600/800" },
+            { title: "Global Market Analysis", category: "Finance", date: "Apr 19", imgUrl: "https://picsum.photos/id/15/600/800" },
+            { title: "World Politics Update", category: "Politics", date: "Apr 15", imgUrl: "https://picsum.photos/id/0/600/800" },
+            { title: "Building Better Habits", category: "How-To", date: "Apr 12", imgUrl: "https://picsum.photos/id/20/600/800" },
+            { title: "Relationship Tips", category: "Relationships", date: "Apr 8", imgUrl: "https://picsum.photos/id/42/600/800" },
+            { title: "Latest Tech Innovations", category: "Technology", date: "Apr 5", imgUrl: "https://picsum.photos/id/91/600/800" },
+            { title: "Modern Design Systems", category: "Technology", date: "Apr 1", imgUrl: "https://picsum.photos/id/96/600/800" },
+            { title: "Join Our Community", category: "Community", date: "Mar 28", imgUrl: "https://picsum.photos/id/104/600/800" }
+        ];
+
+        // 3D Carousel setup
+        const sliderContainer = document.getElementById('dynamicSlider');
+        const RADIUS = 400;
+        const angleStep = 360 / blogPosts.length;
+
+        sliderContainer.innerHTML = '';
+
+        blogPosts.forEach((post, index) => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'item';
+
+            const rotateAngle = index * angleStep;
+            itemDiv.style.transform = `rotateY(${rotateAngle}deg) translateZ(${RADIUS}px)`;
+            itemDiv.style.setProperty('--rotY', `${rotateAngle}deg`);
+
+            const img = document.createElement('img');
+            img.src = post.imgUrl;
+            img.alt = post.title;
+            img.classList.add('item-bg');
+            img.loading = 'lazy';
+
+            const titleEl = document.createElement('h3');
+            titleEl.textContent = post.title;
+
+            const metaDiv = document.createElement('div');
+            metaDiv.className = 'item-meta';
+            metaDiv.innerHTML = `<span class="category">${post.category}</span><span class="date">${post.date}</span>`;
+
+            itemDiv.appendChild(img);
+            itemDiv.appendChild(titleEl);
+            itemDiv.appendChild(metaDiv);
+
+            itemDiv.addEventListener('click', () => {
+                alert(`"${post.title}"\n\nCategory: ${post.category}\nDate: ${post.date}\n\nClick to read on The Brief`);
+            });
+
+            sliderContainer.appendChild(itemDiv);
+        });
+
+        // Hover pause
+        const sliderElem = document.querySelector('.slider');
+        document.querySelectorAll('.item').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                sliderElem.style.animationPlayState = 'paused';
+            });
+            item.addEventListener('mouseleave', () => {
+                sliderElem.style.animationPlayState = 'running';
+            });
+        });
+
+        // Subscribe button
+        document.getElementById('subscribeBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            alert('Thank you for subscribing to The Brief!');
+        });
+
+        // Sparkle field
+        function createSparkleField() {
+            const sparkleContainer = document.getElementById('sparkleField');
+            sparkleContainer.innerHTML = '';
+            for (let i = 0; i < 80; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.classList.add('sparkle');
+                sparkle.style.width = `${2 + Math.random() * 3}px`;
+                sparkle.style.height = sparkle.style.width;
+                sparkle.style.left = `${Math.random() * 100}%`;
+                sparkle.style.top = `${Math.random() * 100}%`;
+                sparkle.style.animationDelay = `${Math.random() * 4}s`;
+                sparkle.style.animationDuration = `${2 + Math.random() * 3}s`;
+                sparkleContainer.appendChild(sparkle);
+            }
+        }
+        createSparkleField();
+    </script>
+</body>
+
+</html>
